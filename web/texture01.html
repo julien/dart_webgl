@@ -35,13 +35,16 @@
       void main () {
         vec2 pos = (-1.0 + 2.0) * gl_FragCoord.xy / u_Resolution.xy;
         // vec2 pos = v_TextureCoord.xy; 
-        
-        pos.x = pos.x + sin(pos.y * 10.0 +  u_Time * 3.0) * u_Angle;
-        pos.y = pos.y + cos(pos.x * 5.0 + u_Time * 0.5) * u_Angle;
-        gl_FragColor = texture2D(u_Sampler, pos);
 
         // original texture coordinates
         // gl_FragColor = texture2D(u_Sampler, v_TextureCoord);
+        
+        pos.x = pos.x + sin(pos.y * 10.0 +  u_Time * 3.0) * u_Angle * cos(0.5 * u_Time);
+        pos.y = pos.y + cos(pos.x * 0.05 + u_Time * 0.9) * u_Angle  * sin(0.09 * u_Time);
+
+         
+
+        gl_FragColor = texture2D(u_Sampler, pos);
       }
     </script>
   
