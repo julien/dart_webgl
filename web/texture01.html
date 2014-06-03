@@ -3,13 +3,20 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Glh - Texture example</title>
-    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title></title>
+    
+    <script async type="application/dart" src="texture01.dart"></script>
+    <script async src="packages/browser/dart.js"></script>
+    
+    <style>
+      body,html{margin:0;padding:0;overflow:hidden}
+    </style>
   </head>
   <body>    
     <canvas id="canvas" width="400" height="300"></canvas>
     
-    <script id="vshader" type="x-shader/x-vertex">    
+    <script id="vs" type="x-shader/x-vertex">    
       attribute vec2 a_Position;
       varying mediump vec2 v_TextureCoord;
 
@@ -21,10 +28,9 @@
       }
     </script>
 
-    <script id="fshader" type="x-shader/x-fragment">
-    #ifdef GL_ES
-      precision mediump float;
-    #endif
+    <script id="fs" type="x-shader/x-fragment">
+     precision mediump float;
+
 
       varying mediump vec2 v_TextureCoord;
       uniform sampler2D u_Sampler;
@@ -47,8 +53,5 @@
         gl_FragColor = texture2D(u_Sampler, pos);
       }
     </script>
-  
-    <script type="application/dart" src="texture01.dart"></script>
-    <script src="packages/browser/dart.js"></script>
   </body>
 </html>

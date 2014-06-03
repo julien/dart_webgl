@@ -1,4 +1,4 @@
-part of glh;
+part of dart_webgl;
 
 class Vec2 {
   Float32List _data;

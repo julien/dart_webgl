@@ -2,8 +2,6 @@ import 'dart:html';
 import 'dart:typed_data';
 import 'dart:web_gl';
 
-import '../lib/glh.dart' as glh;
-
 CanvasElement canvas;
 ImageElement img;
 RenderingContext gl;
@@ -20,16 +18,38 @@ Texture texture;
 double angle;
 
 main() {
+  var vs, fs;
   canvas = querySelector('#canvas');
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
 
-  gl = glh.context(canvas);
-
-  program = glh.createProgram(gl,
-      querySelector('#vshader').text,
-      querySelector('#fshader').text
-    );
+  gl = canvas.getContext('webgl');
+  if (gl == null) {
+    throw 'Unable to create WebGL context';
+  }
+  
+  vs = gl.createShader(RenderingContext.VERTEX_SHADER);
+  gl.shaderSource(vs, querySelector('#vs').text);
+  gl.compileShader(vs);
+  if (!gl.getShaderParameter(vs, RenderingContext.COMPILE_STATUS)) {
+    throw gl.getShaderInfoLog(vs);
+  }
+  
+  fs = gl.createShader(RenderingContext.FRAGMENT_SHADER);
+  gl.shaderSource(fs, querySelector('#fs').text);
+  gl.compileShader(fs);
+  if (!gl.getShaderParameter(fs, RenderingContext.COMPILE_STATUS)) {
+    throw gl.getShaderInfoLog(fs);
+  }
+  
+  program = gl.createProgram();
+  gl.attachShader(program, vs);
+  gl.attachShader(program, fs);
+  gl.linkProgram(program);
+  
+  if (!gl.getProgramParameter(program, RenderingContext.LINK_STATUS)) {
+    throw gl.getProgramInfoLog(program);
+  } 
   gl.useProgram(program);
   
   createBuffers();
@@ -41,7 +61,7 @@ main() {
   img.onLoad.listen(onImageLoaded);
   img.src = 'webgl-logo.png';
 
- startTime = new DateTime.now().millisecondsSinceEpoch;
+  startTime = new DateTime.now().millisecondsSinceEpoch;
 }
 
 createBuffers() {
