@@ -59,7 +59,7 @@ main() {
 
   img = new ImageElement();
   img.onLoad.listen(onImageLoaded);
-  img.src = 'webgl-logo.png';
+  img.src = 'assets/dart-logo.png';
 
   startTime = new DateTime.now().millisecondsSinceEpoch;
 }
