@@ -2,7 +2,6 @@
  * Ported from
  * https://github.com/nzakas/computer-science-in-javascript/blob/master/data-structures/doubly-linked-list/doubly-linked-list.js
  */
-
 part of dart_webgl;
 
 class DoublyLinkedList {

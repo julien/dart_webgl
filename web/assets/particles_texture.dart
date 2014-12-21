@@ -5,8 +5,6 @@ import 'dart:web_gl';
 
 import 'package:dart_webgl/dart_webgl.dart';
 
-
-
 CanvasElement canvas;
 ImageElement img;
 RenderingContext gl;

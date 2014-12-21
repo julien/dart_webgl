@@ -9,4 +9,4 @@ dependencies:
   browser: any
   unittest: any
   plummbur_kruk: ">=0.1.0 <0.1.1"
-  vector_math: any
+  vector_math: ">=1.4.3 <2.0.0"

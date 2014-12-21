@@ -3,18 +3,11 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title></title>
-    
-    <script async type="application/dart" src="particles02.dart"></script>
-    <script async src="packages/browser/dart.js"></script>
-    
-    <style>
-      body,html{margin:0;padding:0;overflow:hidden}
-    </style>
+    <link rel="stylesheet" href="assets/style.css">
   </head>
   <body>
     <img id="texture-invader" alt="a 10x10 alien" style="display: none" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKAQAAAAClSfIQAAAAJklEQVR4XmPgYWCQY2CwZ2DMFWb8f5BBl4HBoYFBkYGBgYGBgQEAPIADuss3gZMAAAAASUVORK5CYII=" />
-    
+
     <script id="vs" type="x-shader/x-vertex">
       uniform mat4 u_matrix;
       attribute vec3 a_position;
@@ -31,7 +24,7 @@
 
     <script id="fs" type="x-shader/x-fragment">
       precision mediump float;
-      
+
       uniform sampler2D u_image;
       varying vec2 v_texCoord;
 
@@ -39,10 +32,11 @@
 
 
         gl_FragColor = texture2D(u_image, v_texCoord);
-      }  
+      }
     </script>
 
-
-    <canvas id="canvas"></canvas> 
+    <canvas id="canvas"></canvas>
+    <script type="application/dart" src="assets/particles_texture.dart"></script>
+    <script src="packages/browser/dart.js"></script>
   </body>
 </html>
