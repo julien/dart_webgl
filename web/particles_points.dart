@@ -2,9 +2,8 @@ import 'dart:html';
 import 'dart:math';
 import 'dart:typed_data';
 import 'dart:web_gl';
-
-import 'package:dart_webgl/dart_webgl.dart';
 import 'package:vector_math/vector_math.dart';
+import 'package:dart_webgl/dart_webgl.dart';
 
 final String vertSrc = '''precision mediump float; 
 attribute vec4 aVertexPosition;
@@ -78,8 +77,8 @@ main() {
   gl.useProgram(program);
 
   // get attribs and uniforms
-  attribs  = getAttribs(gl, program);
-  uniforms = getUniforms(gl, program);
+  attribs = getAttribLocations(gl, program);
+  uniforms = getUniformLocations(gl, program);
 
   gl.enableVertexAttribArray(attribs['aVertexPosition']);
   gl.enableVertexAttribArray(attribs['aVertexVelocity']);
@@ -89,7 +88,11 @@ main() {
   gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
   // matrices
-  pMatrix = makePerspectiveMatrix(45, canvas.clientWidth / canvas.clientHeight, 0.1, 100.0);
+  pMatrix = makePerspectiveMatrix(
+      45,
+      canvas.clientWidth / canvas.clientHeight,
+      0.1,
+      100.0);
   mvMatrix = new Matrix4.identity();
   mvMatrix.translate(0.0, -5.0, -50.0);
 
@@ -120,7 +123,7 @@ void clearContext() {
 }
 
 void setMatrixUniforms() {
-  gl.uniformMatrix4fv(uniforms['uPMatrix'], false,  pMatrix.storage);
+  gl.uniformMatrix4fv(uniforms['uPMatrix'], false, pMatrix.storage);
   gl.uniformMatrix4fv(uniforms['uMVMatrix'], false, mvMatrix.storage);
 }
 
@@ -136,7 +139,7 @@ void adjustParticles() {
 
   for (i; i < l; i += particleComponents) {
 
-    if (cloned[i+3] < lifeSpan && cloned[i+1] > starty - 0.001) {
+    if (cloned[i + 3] < lifeSpan && cloned[i + 1] > starty - 0.001) {
       old = new List.from(cloned.getRange(i, i + particleComponents));
       old[3] += 1.0;
       particles.addAll(old);
@@ -145,7 +148,7 @@ void adjustParticles() {
 
   numParticles = particles.length / particleComponents;
 
-  if (numParticles +  maxSpawnPerFrame < maxParticles) {
+  if (numParticles + maxSpawnPerFrame < maxParticles) {
     for (i = 0; i < maxSpawnPerFrame; i++) {
 
       direction = new Random().nextDouble() < 0.5 ? 20.0 : -20.0;
@@ -155,7 +158,8 @@ void adjustParticles() {
       particles.add(starty + new Random().nextDouble() * 2);
       particles.add(new Random().nextDouble() * 0.5);
       particles.add(0.0);
-      particles.add((15.0 * new Random().nextDouble() - 10.0) * direction * 2.0);
+      particles.add(
+          (15.0 * new Random().nextDouble() - 10.0) * direction * 2.0);
       particles.add((3.0 + 12.0 * new Random().nextDouble()) * direction * 0.5);
       particles.add(5.0 + new Random().nextDouble() * 5.0);
 
@@ -165,8 +169,8 @@ void adjustParticles() {
 }
 
 void resize() {
-  var width = gl.canvas.clientWidth
-    , height = gl.canvas.clientHeight;
+  var width = gl.canvas.clientWidth,
+      height = gl.canvas.clientHeight;
 
   if (gl.canvas.width != width || gl.canvas.height != height) {
     gl.canvas.width = width;
@@ -178,8 +182,20 @@ void drawScene() {
   gl.bindBuffer(ARRAY_BUFFER, pointBuffer);
   gl.bufferData(ARRAY_BUFFER, new Float32List.fromList(particles), STATIC_DRAW);
 
-  gl.vertexAttribPointer(attribs['aVertexPosition'], 4, FLOAT, false, particleComponents * Float32List.BYTES_PER_ELEMENT, 0 * Float32List.BYTES_PER_ELEMENT);
-  gl.vertexAttribPointer(attribs['aVertexVelocity'], 3, FLOAT, false, particleComponents * Float32List.BYTES_PER_ELEMENT, 0 * Float32List.BYTES_PER_ELEMENT);
+  gl.vertexAttribPointer(
+      attribs['aVertexPosition'],
+      4,
+      FLOAT,
+      false,
+      particleComponents * Float32List.BYTES_PER_ELEMENT,
+      0 * Float32List.BYTES_PER_ELEMENT);
+  gl.vertexAttribPointer(
+      attribs['aVertexVelocity'],
+      3,
+      FLOAT,
+      false,
+      particleComponents * Float32List.BYTES_PER_ELEMENT,
+      0 * Float32List.BYTES_PER_ELEMENT);
 
   gl.drawArrays(POINTS, 0, numParticles.toInt());
 }
