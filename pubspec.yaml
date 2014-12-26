@@ -1,12 +1,10 @@
 name: dart_webgl
 author: Julien Castelain <jcastelain@gmail.com>
-description: WebGL fun with Dart.
+description: WebGL stuff with Dart.
 
 environment:
   sdk: ">=0.8.10+6 <2.0.0"
 
 dependencies:
   browser: any
-  unittest: any
-  plummbur_kruk: ">=0.1.0 <0.1.1"
   vector_math: ">=1.4.3 <2.0.0"

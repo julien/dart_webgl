@@ -44,37 +44,11 @@ Program linkProgram(RenderingContext gl, List<Shader> shaders,
   return p;
 }
 
-Map<String, int> getAttribLocations(RenderingContext gl, Program program) {
-  var total = gl.getProgramParameter(program, ACTIVE_ATTRIBUTES),
-      i,
-      info,
-      out = {};
+Float32List makePerspective(num fov, num aspectRatio, num near, num far) {
 
-  for (i = 0; i < total; i++) {
-    info = gl.getActiveAttrib(program, i);
-    out[info.name] = gl.getAttribLocation(program, info.name);
-  }
-  return out;
-}
-
-Map<String, UniformLocation> getUniformLocations(RenderingContext gl,
-    Program program) {
-  var total = gl.getProgramParameter(program, ACTIVE_UNIFORMS),
-      i,
-      info,
-      out = {};
-
-  for (i = 0; i < total; i++) {
-    info = gl.getActiveUniform(program, i);
-    out[info.name] = gl.getUniformLocation(program, info.name);
-  }
-  return out;
-}
-
-Float32List makeFrustum(fov, aspect, near, far) {
   var top = near * tan(fov * PI / 360);
   var bottom = -top;
-  var right = top * aspect;
+  var right = top * aspectRatio;
   var left = -right;
 
   var a = ((right + left) / (right - left)).toDouble();
@@ -84,13 +58,19 @@ Float32List makeFrustum(fov, aspect, near, far) {
   var x = ((2 * near) / (right - left)).toDouble();
   var y = ((2 * near) / (top - bottom)).toDouble();
 
-  return new Float32List.fromList(
-      [x, 0.0, a, 0.0, 0.0, y, 0.0, 0.0, 0.0, 0.0, c, d, 0.0, 0.0, -1.0, 0.0]);
+  return new Float32List.fromList([
+    x, 0.0, a, 0.0,
+    0.0, y, b, 0.0,
+    0.0, 0.0, c, d,
+    0.0, 0.0, -1.0, 0.0]);
 }
 
 List<num> makeModeView() {
-  return new Float32List.fromList(
-      [1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0]);
+  return new Float32List.fromList([
+    1.0, 0.0, 0.0, 0.0,
+    0.0, 1.0, 0.0, 0.0,
+    0.0, 0.0, 1.0, 0.0,
+    0.0, 0.0, 0.0, 1.0]);
 }
 
 

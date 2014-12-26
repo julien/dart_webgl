@@ -49,7 +49,7 @@ num lastJump;
 void main() {
   document.body.onMouseDown.listen(mouseDown);
 
-  vWidth =  window.innerHeight;
+  vWidth = window.innerHeight;
   vHeight = window.innerHeight;
 
   canvas = querySelector('#canvas');
@@ -74,7 +74,9 @@ void main() {
   flock = new Flock(200);
   flock.scatter(max(vWidth, vHeight), [0, 0, 0], 1);
 
-  var tmp = [], i = 0, l = flock.boids.length * 6;
+  var tmp = [],
+      i = 0,
+      l = flock.boids.length * 6;
   for (i = 0; i < l; i++) {
     tmp.add(0.0);
   }
@@ -101,13 +103,23 @@ void main() {
   viewMatrix.rotateY(PI);
   gl.uniformMatrix4fv(uVMatrix, false, viewMatrix.storage);
 
-  boidModel = new Float32List.fromList([
-     0.0,  0.0, -1.0,
-    -1.0, -1.0,  1.0,
-     1.0, -1.0,  1.0,
-     1.0,  1.0,  1.0,
-    -1.0,  1.0,  1.0
-  ]);
+  boidModel = new Float32List.fromList(
+      [
+          0.0,
+          0.0,
+          -1.0,
+          -1.0,
+          -1.0,
+          1.0,
+          1.0,
+          -1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          -1.0,
+          1.0,
+          1.0]);
 
   modelBuffer = gl.createBuffer();
   gl.bindBuffer(ARRAY_BUFFER, modelBuffer);
@@ -134,7 +146,8 @@ void update([num time]) {
 
   flock.update(time);
 
-  var i = 0, l = flock.boids.length;
+  var i = 0,
+      l = flock.boids.length;
   for (i = 0; i < l; i++) {
     vertices[i * 3 + 0] = flock.boids[i].pos[0];
     vertices[i * 3 + 1] = flock.boids[i].pos[1];
@@ -158,5 +171,9 @@ void update([num time]) {
 
   gl.bindBuffer(ARRAY_BUFFER, modelBuffer);
   gl.vertexAttribPointer(aVertexPosition, 3, FLOAT, false, 0, 0);
-  ext.drawArraysInstancedAngle(TRIANGLE_FAN, 0, boidModel.length ~/ 3, flock.boids.length);
+  ext.drawArraysInstancedAngle(
+      TRIANGLE_FAN,
+      0,
+      boidModel.length ~/ 3,
+      flock.boids.length);
 }
