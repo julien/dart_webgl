@@ -6,28 +6,8 @@ import 'package:vector_math/vector_math.dart';
 import 'package:dart_webgl/dart_webgl.dart';
 
 
-final String vertSrc = '''precision mediump float; 
-uniform mat4 uPMatrix;
-uniform mat4 uVMatrix;
-
-attribute vec3 aVertexPosition;
-attribute vec3 aPosition;
-
-varying vec3 vLightning;
-
-void main() {
-  gl_Position = uPMatrix * uVMatrix * vec4(aVertexPosition + aPosition, 1);
-  vLightning = aVertexPosition;
-}
-''';
-
-final String fragSrc = '''precision mediump float; 
-varying vec3 vLightning;
-
-void main() {
-  gl_FragColor = vec4(vLightning, 1);
-}
-''';
+String vertSrc = document.getElementById('vs').text;
+String fragSrc = document.getElementById('fs').text;
 
 CanvasElement canvas;
 RenderingContext gl;
@@ -41,15 +21,13 @@ Matrix4 perspective, viewMatrix;
 Float32List boidModel;
 Buffer modelBuffer;
 Flock flock;
-List<num> mouse = [0, 0];
 num vWidth, vHeight;
 AngleInstancedArrays ext;
 num lastJump;
 
 void main() {
-  document.body.onMouseDown.listen(mouseDown);
 
-  vWidth = window.innerHeight;
+  vWidth = window.innerWidth;
   vHeight = window.innerHeight;
 
   canvas = querySelector('#canvas');
@@ -85,7 +63,7 @@ void main() {
 
   gl.enable(DEPTH_TEST);
   gl.depthFunc(LEQUAL);
-  gl.clearColor(0.0, 0.1, 0.1, 1);
+  gl.clearColor(0.8, 0.8, 0.8, 1);
 
   aVertexPosition = gl.getAttribLocation(program, 'aVertexPosition');
   aPosition = gl.getAttribLocation(program, 'aPosition');
@@ -95,7 +73,7 @@ void main() {
   gl.enableVertexAttribArray(aVertexPosition);
   gl.enableVertexAttribArray(aPosition);
 
-  perspective = makePerspectiveMatrix(PI * .75, vWidth / vHeight, 0.1, 200.0);
+  perspective = makePerspectiveMatrix(PI * .75, vWidth / vHeight, .1, 200.0);
   gl.uniformMatrix4fv(uPMatrix, false, perspective.storage);
 
   viewMatrix = new Matrix4.identity();
@@ -132,10 +110,6 @@ void main() {
   update();
 }
 
-void mouseDown(MouseEvent e) {
-  mouse[0] = e.client.x;
-  mouse[1] = e.client.y;
-}
 
 void update([num time]) {
   window.requestAnimationFrame(update);

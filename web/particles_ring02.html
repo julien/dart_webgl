@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <canvas id="canvas"></canvas>
+
+    <script type="x-shader/x-vertex" id="vs">
+      attribute vec3 aVertexPosition;
+
+      uniform mat4 uVMatrix; // modelview
+      uniform mat4 uPMatrix; // perspective
+      uniform float uTime;
+
+      varying float vTime;
+
+      void main() {
+        gl_Position = uPMatrix * uVMatrix * vec4(aVertexPosition, 1.0);
+        gl_PointSize = 5.0 + sin(uTime) * 2.0;
+        vTime = uTime;
+      }
+    </script>
+
+    <script type="x-shader/x-fragment" id="fs">
+      precision mediump float;
+
+      varying float vTime;
+
+      void main() {
+        gl_FragColor = vec4(1.0, 1.0, 1.0, 0.1);
+      }
+    </script>
+
+    <script type="application/dart" src="particles_ring02.dart"></script>
+    <script src="packages/browser/dart.js"></script>
+  </body>
+</html>

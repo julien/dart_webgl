@@ -9,6 +9,31 @@
 
   <body>
     <canvas id="canvas"></canvas>
+
+    <script type="x-shader/x-vertex" id="vs">
+      uniform mat4 uPMatrix;
+      uniform mat4 uVMatrix;
+
+      attribute vec3 aVertexPosition;
+      attribute vec3 aPosition;
+
+      varying vec3 vLightning;
+
+      void main() {
+        gl_Position = uPMatrix * uVMatrix * vec4(aVertexPosition + aPosition, 1);
+        vLightning = aVertexPosition;
+      }
+    </script>
+
+    <script type="x-shader/x-fragment" id="fs">
+      precision mediump float;
+      varying vec3 vLightning;
+
+      void main() {
+        gl_FragColor = vec4(vLightning, 1);
+      }
+    </script>
+
     <script type="application/dart" src="boids.dart"></script>
     <!-- for this next line to work, your pubspec.yaml file must have a dependency on 'browser' -->
     <script src="packages/browser/dart.js"></script>
